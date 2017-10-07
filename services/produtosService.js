@@ -1,61 +1,80 @@
-var pg = require('pg');
-
-const client = new Client({
-    user: 'postgres',
+var mysql = require('mysql');
+var connection = mysql.createConnection({
     host: 'localhost',
-    database: 'dbProdutos',
-    password: '1234',
-    port: 5432,
-  });
-
-  client.connect();
+    user: 'root',
+    password: '',
+    database: 'bdloja'
+});
 
   module.exports = {
+    //obterProdutos: function(){
+    //     connection.query('SELECT * FROM tbprodutos', (err, rows) => {
+    //         console.log(rows);
+    //         return new Promise(
+    //             function(resolve, reject){
+    //                 if(err){
+    //                     console.log(err);
+    //                     reject();
+    //                 }else{
+    //                     resolve(rows);
+    //                 }
+    //             }
+    //         )
+        
+    //         connection.end();
+    //     })
+    // 
+    //},
+
     obterProdutos: function(){
-        client.query('SELECT * FROM tbProdutos', (err, res) => {
-            return new Promise(
-                function(resolve, reject){
+        return new Promise(
+            function(resolve, reject){
+                connection.query('SELECT * FROM tbprodutos', (err, rows) => {
                     if(err){
+                        console.log(err);
                         reject();
                     }else{
-                        resolve(res.rows);
-                    }
-                }
-            )
-        
-            client.end();
-        })
-    },
+                        resolve(rows);
+                    }  
+                })
+            })
+},
     adicionarProduto: function(Produto){
-        client.query("INSERT INTO tbProdutos ('Nome','Descricao', 'Valor', 'ImageUrl') VALUES ('"
-            + Produto.Nome + "','"
-            + Produto.Descricao + "','"
-            + Produto.Valor + "','"
-            + Produto.ImageUrl + "');"
-        , (err, res) => {
+        // connection.query("INSERT INTO tbprodutos ('Nome','Descricao', 'Valor', 'ImageUrl') VALUES ('"
+        //     + Produto.Nome + "','"
+        //     + Produto.Descricao + "','"
+        //     + Produto.Valor + "','"
+        //     + Produto.ImageUrl + "');"
+        // , (err, res) => {
             return new Promise(
                 function(resolve, reject){
+                    connection.query("INSERT INTO tbprodutos ('Nome','Descricao', 'Valor', 'ImageUrl') VALUES ('"
+                    + Produto.Nome + "','"
+                    + Produto.Descricao + "','"
+                    + Produto.Valor + "','"
+                    + Produto.ImageUrl + "');"
+                , (err, res) => {
                     if(err){
                         reject();
                     }else{
-                        resolve(res.rows.insertId);
+                        resolve(rows.insertId);
                     }
                 }
             )
         
-            client.end();
+           
         })
 
     },
     editarProduto: function(Produto){
-        client.query("UPDATE tbProdutos SET ('Nome') = '" + Produto.Nome + "',"
-            + "('Descricao') = '" + Produto.Descricao + "',"
-            + "('Valor') = '" + Produto.Valor + "',"
-            + "('ImageUrl') = '" + Produto.ImageUrl + "'"
-            + "WHERE Id = '" + Produto.Id + "';"
-        , (err, res) => {
             return new Promise(
                 function(resolve, reject){
+                    connection.query("UPDATE tbprodutos SET Nome = '" + Produto.Nome + "', "
+                    + "Descricao = '" + Produto.Descricao + "', "
+                    + "Valor = '" + Produto.Valor + "', "
+                    + "ImageUrl = '" + Produto.ImageUrl + "' "
+                    + "WHERE Id = '" + Produto.Id + "';"
+                , (err, res) => {
                     if(err){
                         reject();
                     }else{
@@ -64,16 +83,17 @@ const client = new Client({
                 }
             )
         
-            client.end();
+           
         })
 
     },
-    excluirProduto: function(Produto){
-        client.query("DELETE FROM tbProdutos "
-            + "WHERE Id = '" + Produto.Id + "';"
-        , (err, res) => {
+    excluirProduto: function(Id){
+        
             return new Promise(
                 function(resolve, reject){
+                    connection.query("DELETE FROM tbprodutos "
+                    + "WHERE Id = '" + Id + "';"
+                , (err, res) => {
                     if(err){
                         reject();
                     }else{
@@ -82,7 +102,7 @@ const client = new Client({
                 }
             )
         
-            client.end();
+           
         })
 
     }

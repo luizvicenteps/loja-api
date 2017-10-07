@@ -37,7 +37,7 @@ router.put('/:Id', function(req,res, next) {
     })
 });
 
-/* Editar Produto*/
+/* remover Produto*/
 router.delete('/:Id', function(req,res, next) {
     service.excluirProduto(req.params.Id)
     .then(function(){
