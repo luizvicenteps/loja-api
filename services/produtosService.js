@@ -6,26 +6,7 @@ var connection = mysql.createConnection({
     database: 'bdloja'
 });
 
-  module.exports = {
-    //obterProdutos: function(){
-    //     connection.query('SELECT * FROM tbprodutos', (err, rows) => {
-    //         console.log(rows);
-    //         return new Promise(
-    //             function(resolve, reject){
-    //                 if(err){
-    //                     console.log(err);
-    //                     reject();
-    //                 }else{
-    //                     resolve(rows);
-    //                 }
-    //             }
-    //         )
-        
-    //         connection.end();
-    //     })
-    // 
-    //},
-
+module.exports = {
     obterProdutos: function(){
         return new Promise(
             function(resolve, reject){
@@ -38,33 +19,26 @@ var connection = mysql.createConnection({
                     }  
                 })
             })
-},
+    },
     adicionarProduto: function(Produto){
-        // connection.query("INSERT INTO tbprodutos ('Nome','Descricao', 'Valor', 'ImageUrl') VALUES ('"
-        //     + Produto.Nome + "','"
-        //     + Produto.Descricao + "','"
-        //     + Produto.Valor + "','"
-        //     + Produto.ImageUrl + "');"
-        // , (err, res) => {
             return new Promise(
                 function(resolve, reject){
-                    connection.query("INSERT INTO tbprodutos ('Nome','Descricao', 'Valor', 'ImageUrl') VALUES ('"
-                    + Produto.Nome + "','"
-                    + Produto.Descricao + "','"
-                    + Produto.Valor + "','"
-                    + Produto.ImageUrl + "');"
-                , (err, res) => {
+                    connection.query("INSERT INTO tbprodutos (Nome,Descricao,Valor,ImageUrl) VALUES ('" + 
+                    Produto.Nome + "','" +
+                    Produto.Descricao + "','" +
+                    Produto.Valor + "','" +
+                    Produto.ImageUrl + "');"
+                , (err, rows) => {
                     if(err){
+                      
                         reject();
                     }else{
                         resolve(rows.insertId);
+                    
                     }
                 }
             )
-        
-           
         })
-
     },
     editarProduto: function(Produto){
             return new Promise(
@@ -82,13 +56,9 @@ var connection = mysql.createConnection({
                     }
                 }
             )
-        
-           
         })
-
     },
     excluirProduto: function(Id){
-        
             return new Promise(
                 function(resolve, reject){
                     connection.query("DELETE FROM tbprodutos "
@@ -101,9 +71,6 @@ var connection = mysql.createConnection({
                     }
                 }
             )
-        
-           
         })
-
     }
 }
